@@ -60,7 +60,7 @@ This will save in folder `results/models-dep/english-ewt/eager-bloom560-mlp` the
 3. `pred.conllu`: Parser prediction of CoNLL-U test file.
 
 
-[$\color{magenta}{\text{comming soon}}$] **Constituency Parsing** 
+[$\textcolor{magenta}{\textsf{comming soon}}$] **Constituency Parsing** 
 
 
 ### Evaluation
