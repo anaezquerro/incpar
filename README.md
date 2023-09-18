@@ -125,9 +125,7 @@ python -u -m supar.cmds.dep.sl predict -p \
 
 ## Acknowledgments 
 
-This work has been funded by the European Research Council (ERC), under the Horizon Europe research and innovation programme (SALSA, grant agreement No 101100615).
-
-
+This work has been funded by the European Research Council (ERC), under the Horizon Europe research and innovation programme (SALSA, grant agreement No 101100615), ERDF/MICINN-AEI (SCANNER-UDC, PID2020-113230RB-C21), Xunta de Galicia (ED431C 2020/11), Cátedra CICAS (Sngular, University of A Coruña), and Centro de Investigación de Galicia ‘‘CITIC’’.
 
 ## Citation
 
