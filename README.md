@@ -123,4 +123,27 @@ python -u -m supar.cmds.dep.sl predict -p \
     --pred ../results/models-dep/english-ewt/abs-mgpt-lstm/pred.conllu
 ```
 
+## Acknowledgments 
 
+This work has been funded by the European Research Council (ERC), under the Horizon Europe research and innovation programme (SALSA, grant agreement No 101100615).
+
+
+
+## Citation
+
+```bib
+@thesis{ezquerro-2023-syntactic,
+  title     = {{Análisis sintáctico totalmente incremental basado en redes neuronales}},
+  author    = {Ezquerro, Ana and Gómez-Rodríguez, Carlos and Vilares, David},
+  institution = {University of A Coruña},
+  year      = {2023},
+  url       = {https://ruc.udc.es/dspace/handle/2183/33269}
+}
+
+@inproceedings{ezquerro-2023-challenges,
+  title     = {{On the Challenges of Fully Incremental Neural Dependency Parsing}},
+  author    = {Ezquerro, Ana and Gómez-Rodríguez, Carlos and Vilares, David},
+  booktitle = {Proceedings of ICNLP-AACL 2023},
+  year      = {2023}
+}
+```
