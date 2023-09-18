@@ -1,6 +1,6 @@
 # :pencil: [IncPar](https://github.com/anaezquerro/incpar): Fully [Inc](https://github.com/anaezquerro/incpar)remental Neural Dependency and Constituency [Par](https://github.com/anaezquerro/incpar)sing
 
-A Python package for reproducing results of fully incremental dependency (comming soon constituency :raised_hands:) parsers described in ":page_facing_up:On The Challenges of Fully Incremental Neural Dependency Parsing" ([IJCNLP-AACL 2023](http://www.ijcnlp-aacl2023.org/)) and "[:page_facing_up:](https://ruc.udc.es/dspace/handle/2183/33269)Análisis sintáctico totalmente incremental basado en redes neuronales"  ([University of A Coruña](https://ruc.udc.es/)).
+A Python package for reproducing results of fully incremental dependency and constituency parsers described in ":page_facing_up:On The Challenges of Fully Incremental Neural Dependency Parsing" ([IJCNLP-AACL 2023](http://www.ijcnlp-aacl2023.org/)) and "[:page_facing_up:](https://ruc.udc.es/dspace/handle/2183/33269)Análisis sintáctico totalmente incremental basado en redes neuronales"  ([University of A Coruña](https://ruc.udc.es/)).
 
 **Note**: Our implementation was built from forking [yzhangcs](https://github.com/yzhangcs)' [SuPar v1.1.4](https://github.com/yzhangcs/parser) repository. The Vector Quantization module was extracted from [lucidrains](https://github.com/lucidrains)' [vector-quantize-pytorch](https://github.com/lucidrains/vector-quantize-pytorch) and Sequence Labeling encodings from [Polifack](https://github.com/Polifack)'s [CoDeLin](https://github.com/Polifack/codelin) repositories.
 
@@ -16,7 +16,7 @@ A Python package for reproducing results of fully incremental dependency (commin
 
 ## Usage
 
-In order to reproduce our experiments, follow the installation and deployment steps of [SuPar](https://github.com/yzhangcs/parser), [vector-quantize-pytorch](https://github.com/lucidrains/vector-quantize-pytorch) and [CoDeLin](https://github.com/Polifack/codelin) repositories. Supported functionalities are **training**, **evaluation** and **prediction** from CoNLL-U or PTB-bracketed files. We highly suggest to run our parsers using terminal commands in order to train and generate prediction files. In the future we'll make available [SuPar methods](https://github.com/yzhangcs/parser#usage) to easily test our parsers' performance from Python terminal.
+In order to reproduce our experiments, follow the installation and deployment steps of [SuPar](https://github.com/yzhangcs/parser), [vector-quantize-pytorch](https://github.com/lucidrains/vector-quantize-pytorch) and [CoDeLin](https://github.com/Polifack/codelin) repositories. Supported functionalities are **training**, **evaluation** and **prediction** from CoNLL-U or PTB-bracketed files. We highly suggest to run our parsers using terminal commands in order to train and generate prediction files. In the future :raised_hands: we'll make available [SuPar methods](https://github.com/yzhangcs/parser#usage) to easily test our parsers' performance from Python terminal.
 
 ### Training
 
@@ -38,7 +38,7 @@ python3 -u -m supar.cmds.dep.sl train -b -c configs/config-mgpt.ini \
 ```
 Model configuration (number and size of layers, optimization parameters, encoder selection) is specified using configuration files (see folder `configs/`). We provided the main configuration used for our experiments. 
 
-* **Transition-based Dependency Parser w. Arc-Eager** ([`ArcEagerdependencyParser`](supar/models/dep/eager/parser.py)): Inherits the same arguments as the main class [`Parser`](supar/parser.py).
+* **Transition-based Dependency Parser w. Arc-Eager** ([`ArcEagerDependencyParser`](supar/models/dep/eager/parser.py)): Inherits the same arguments as the main class [`Parser`](supar/parser.py).
 
 ***Experiment***: Train Arc-Eager parser using [BLOOM-560M ](https://huggingface.co/bigscience/bloom-560m) as encoder and a MLP-based decoder to predict transitions with delay $k=1$ ( `--delay`) and Vector Quantization (`--use_vq`).
 
@@ -60,7 +60,33 @@ This will save in folder `results/models-dep/english-ewt/eager-bloom560-mlp` the
 3. `pred.conllu`: Parser prediction of CoNLL-U test file.
 
 
-$\textcolor{magenta}{\textsf{[comming soon]}}$  **Constituency Parsing** 
+**Constituency Parsing** 
+
+* **Sequence Labeling Constituency Parser** ([`SLConstituencyParser`](supar/models/const/sl/parser.py)): Analogously to [`SLDependencyParser`](supar/models/dep/sl/parser.py), it allows the flag `--sl_codes` in order to specify the indexing to use (`abs`, `rel`).
+
+```shell 
+python3 -u -m supar.cmds.const.sl train -b -c configs/config-mgpt.ini \ 
+    -p ../results/models-con/ptb/abs-mgpt-lstm/parser.pt \ 
+    --sl_codes=abs --decoder=lstm
+    --train ../data/ptb/train.trees \ 
+    --dev ../data/ptb/dev.trees \ 
+    --test ../data/ptb/test.trees \ 
+    --save_eval=../results/models-con/ptb/abs-mgpt-lstm/metrics.pickle \ 
+    --save_predict=../results/models-con/ptb/abs-mgpt-lstm/pred.trees
+```
+
+* **Attach-Juxtapose Constituency Parser** ([`AttachJuxtaposeConstituencyParser`](supar/models/const/aj/parser.py)): From the original SuPar implementation, we added the delay and Vector Quantization flag:
+
+```shell 
+python3 -u -m supar.cmds.const.aj train -b -c configs/config-bloom560.ini \ 
+    -p ../results/models-con/ptb/aj-bloom560-mlp/parser.pt \ 
+    --decoder=mlp --delay=2 --use_vq \
+    --train ../data/ptb/train.trees \ 
+    --dev ../data/ptb/dev.trees \ 
+    --test ../data/ptb/test.trees \ 
+    --save_eval=../results/models-con/ptb/aj-bloom560-mlp/metrics.pickle \ 
+    --save_predict=../results/models-con/ptb/aj-bloom560-mlp/pred.trees
+```
 
 
 ### Evaluation
