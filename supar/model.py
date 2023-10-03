@@ -123,7 +123,7 @@ class Model(nn.Module):
                                                 pooling=self.args.bert_pooling,
                                                 pad_index=self.args.pad_index,
                                                 mix_dropout=self.args.mix_dropout,
-                                                finetune=True)
+                                                finetune=self.args.finetune)
             self.encoder_dropout = nn.Dropout(p=self.args.encoder_dropout)
             self.args.n_encoder_hidden = self.encoder.n_out
 
