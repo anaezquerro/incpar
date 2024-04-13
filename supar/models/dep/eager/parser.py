@@ -129,7 +129,7 @@ class ArcEagerDependencyParser(Parser):
         """
         lens = list(map(len, tensor_list))
         max_len = max(lens)
-        return torch.tensor([[True] * length + [False] * (max_len - length) for length in lens]).cuda()
+        return torch.tensor([[True] * length + [False] * (max_len - length) for length in lens]).to(self.model.device)
 
     def pad_tensor(
             self,
@@ -147,20 +147,20 @@ class ArcEagerDependencyParser(Parser):
         if isinstance(pad_index, int):
             if isinstance(tensor_list[0], list):
                 return torch.tensor(
-                    [tensor + [pad_index] * (max_length - len(tensor)) for tensor in tensor_list]).cuda()
+                    [tensor + [pad_index] * (max_length - len(tensor)) for tensor in tensor_list]).to(self.model.device)
             else:
                 return torch.tensor(
-                    [tensor.tolist() + [pad_index] * (max_length - len(tensor)) for tensor in tensor_list]).cuda()
+                    [tensor.tolist() + [pad_index] * (max_length - len(tensor)) for tensor in tensor_list]).to(self.model.device)
         else:
             pad_indexes = pad_index
             if isinstance(tensor_list[0], list):
                 return torch.tensor(
                     [tensor + [pad_index] * (max_length - len(tensor)) for tensor, pad_index in
-                     zip(tensor_list, pad_indexes)]).cuda()
+                     zip(tensor_list, pad_indexes)]).to(self.model.device)
             else:
                 return torch.tensor(
                     [tensor.tolist() + [pad_index] * (max_length - len(tensor)) for tensor, pad_index in
-                     zip(tensor_list, pad_indexes)]).cuda()
+                     zip(tensor_list, pad_indexes)]).to(self.model.device)
 
     def get_text_mask(self, batch):
         text_lens = (batch.lens - 2 - self.args.delay).tolist()

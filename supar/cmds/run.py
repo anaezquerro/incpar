@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os
-
+import os, shutil
 import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
@@ -25,6 +24,10 @@ def init(parser):
     args, unknown = parser.parse_known_args()
     args, unknown = parser.parse_known_args(unknown, args)
     args = Config.load(**vars(args), unknown=unknown)
+    
+    args.folder = '/'.join(args.path.split('/')[:-1])
+    if not os.path.exists(args.folder):
+        os.makedirs(args.folder)
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.device
     if get_device_count() > 1:

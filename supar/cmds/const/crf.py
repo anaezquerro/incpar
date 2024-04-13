@@ -22,8 +22,6 @@ def main():
     subparser.add_argument('--dev', default='data/ptb/dev.pid', help='path to dev file')
     subparser.add_argument('--test', default='data/ptb/test.pid', help='path to test file')
     subparser.add_argument('--embed', default=None, help='file or embeddings available at `supar.utils.Embedding`')
-    subparser.add_argument('--save_eval', type=str, default=None)
-    subparser.add_argument('--save_predict', type=str, default=None)
     # evaluate
     subparser = subparsers.add_parser('evaluate', help='Evaluate the specified parser and dataset.')
     subparser.add_argument('--buckets', default=8, type=int, help='max num of buckets to use')

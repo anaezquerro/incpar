@@ -27,14 +27,12 @@ In order to reproduce our experiments, follow the installation and deployment st
 ***Experiment***: Train absolute encoding parser with [mGPT](https://huggingface.co/ai-forever/mGPT) as encoder and LSTM layer as decoder to predict labels.  
 
 ```shell
-python3 -u -m supar.cmds.dep.sl train -b -c configs/config-mgpt.ini \ 
-    -p ../results/models-dep/english-ewt/abs-mgpt-lstm/parser.pt \ 
-    -- sl_codes=abs --decoder=lstm \  
-    --train ../data/english-ewt/train.conllu \ 
-    --dev ../data/english-ewt/dev.conllu \ 
-    --test ../data/english-ewt/test.conllu \ 
-    --save_eval=../results/models-dep/english-ewt/abs-mgpt-lstm/metrics.pickle \ 
-    --save_predict=../results/models-dep/english-ewt/abs-mgpt-lstm/pred.conllu
+python3 -u -m supar.cmds.dep.sl train -b -c configs/config-mgpt.ini \
+    -p ../results/models-dep/english-ewt/abs-mgpt-lstm/parser.pt \
+    --sl_codes abs --decoder lstm \
+    --train ../treebanks/english-ewt/train.conllu \
+    --dev ../treebanks/english-ewt/dev.conllu \
+    --test ../treebanks/english-ewt/test.conllu
 ```
 Model configuration (number and size of layers, optimization parameters, encoder selection) is specified using configuration files (see folder `configs/`). We provided the main configuration used for our experiments. 
 
@@ -43,14 +41,12 @@ Model configuration (number and size of layers, optimization parameters, encoder
 ***Experiment***: Train Arc-Eager parser using [BLOOM-560M ](https://huggingface.co/bigscience/bloom-560m) as encoder and a MLP-based decoder to predict transitions with delay $k=1$ ( `--delay`) and Vector Quantization (`--use_vq`).
 
 ```shell
-python3 -u -m supar.cmds.dep.eager train -b -c configs/config-bloom560.ini \ 
-    -p ../results/models-dep/english-ewt/eager-bloom560-mlp/parser.pt \ 
-    --decoder=mlp --delay=1 --use_vq \  
-    --train ../data/english-ewt/train.conllu \ 
-    --dev ../data/english-ewt/dev.conllu \ 
-    --test ../data/english-ewt/test.conllu \ 
-    --save_eval=../results/models-dep/english-ewt/eager-bloom560-mlp/metrics.pickle \ 
-    --save_predict=../results/models-dep/english-ewt/eager-bloom560-mlp/pred.conllu
+python3 -u -m supar.cmds.dep.eager train -b -c configs/config-bloom560.ini \
+    -p ../results/models-dep/english-ewt/eager-bloom560-mlp/parser.pt \
+    --decoder=mlp --delay=1 --use_vq \
+    --train ../treebanks/english-ewt/train.conllu \
+    --dev ../treebanks/english-ewt/dev.conllu \
+    --test ../treebanks/english-ewt/test.conllu
 ```
 
 This will save in folder `results/models-dep/english-ewt/eager-bloom560-mlp` the following files:
@@ -65,27 +61,23 @@ This will save in folder `results/models-dep/english-ewt/eager-bloom560-mlp` the
 * **Sequence Labeling Constituency Parser** ([`SLConstituencyParser`](supar/models/const/sl/parser.py)): Analogously to [`SLDependencyParser`](supar/models/dep/sl/parser.py), it allows the flag `--sl_codes` in order to specify the indexing to use (`abs`, `rel`).
 
 ```shell 
-python3 -u -m supar.cmds.const.sl train -b -c configs/config-mgpt.ini \ 
-    -p ../results/models-con/ptb/abs-mgpt-lstm/parser.pt \ 
-    --sl_codes=abs --decoder=lstm
-    --train ../data/ptb/train.trees \ 
-    --dev ../data/ptb/dev.trees \ 
-    --test ../data/ptb/test.trees \ 
-    --save_eval=../results/models-con/ptb/abs-mgpt-lstm/metrics.pickle \ 
-    --save_predict=../results/models-con/ptb/abs-mgpt-lstm/pred.trees
+python3 -u -m supar.cmds.const.sl train -b -c configs/config-mgpt.ini \
+    -p ../results/models-con/ptb/abs-mgpt-lstm/parser.pt \
+    --sl_codes abs --decoder lstm \
+    --train ../treebanks/ptb-gold/train.trees \
+    --dev ../treebanks/ptb-gold/dev.trees \
+    --test ../treebanks/ptb-gold/test.trees
 ```
 
 * **Attach-Juxtapose Constituency Parser** ([`AttachJuxtaposeConstituencyParser`](supar/models/const/aj/parser.py)): From the original SuPar implementation, we added the delay and Vector Quantization flag:
 
 ```shell 
-python3 -u -m supar.cmds.const.aj train -b -c configs/config-bloom560.ini \ 
-    -p ../results/models-con/ptb/aj-bloom560-mlp/parser.pt \ 
-    --decoder=mlp --delay=2 --use_vq \
-    --train ../data/ptb/train.trees \ 
-    --dev ../data/ptb/dev.trees \ 
-    --test ../data/ptb/test.trees \ 
-    --save_eval=../results/models-con/ptb/aj-bloom560-mlp/metrics.pickle \ 
-    --save_predict=../results/models-con/ptb/aj-bloom560-mlp/pred.trees
+python3 -u -m supar.cmds.const.aj train -b -c configs/config-bloom560.ini \
+    -p ../results/models-con/ptb/aj-bloom560-mlp/parser.pt \
+    --delay=2 \
+    --train ../treebanks/ptb-gold/train.trees \
+    --dev ../treebanks/ptb-gold/dev.trees \
+    --test ../treebanks/ptb-gold/test.trees
 ```
 
 

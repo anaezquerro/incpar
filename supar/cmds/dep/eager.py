@@ -26,8 +26,6 @@ def main():
     subparser.add_argument('--use_vq', action='store_true', default=False, help='whether to use vector quantization')
     subparser.add_argument('--decoder', choices=['mlp', 'lstm'], default='mlp', help='incremental decoder to use')
     subparser.add_argument('--delay', type=int, default=0)
-    subparser.add_argument('--save_eval', type=str, default=None)
-    subparser.add_argument('--save_predict', type=str, default=None)
     # evaluate
     subparser = subparsers.add_parser('evaluate', help='Evaluate the specified parser and dataset.')
     subparser.add_argument('--punct', action='store_true', help='whether to include punctuation')

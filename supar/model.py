@@ -232,3 +232,10 @@ class Model(nn.Module):
             x, indices, commit_loss, _ = self.vq(x)
         qloss = commit_loss.squeeze()
         return x, qloss
+    
+    @property 
+    def device(self):
+        if self.args.device == 'cpu':
+            return 'cpu'
+        else:
+            return f'cuda:{self.args.device}'

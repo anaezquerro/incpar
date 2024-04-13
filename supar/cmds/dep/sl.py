@@ -28,8 +28,6 @@ def main():
     subparser.add_argument('--decoder', choices=['mlp', 'lstm'], default='mlp', help='incremental decoder to use')
     subparser.add_argument('--sl_codes', choices=['abs', 'rel', 'pos', '1p', '2p'], default=None, help='SL coding used')
     subparser.add_argument('--delay', type=int, default=0)
-    subparser.add_argument('--save_eval', type=str, default=None)
-    subparser.add_argument('--save_predict', type=str, default=None)
     subparser.add_argument('--root_node', type=str, default='S')
     # evaluate
     subparser = subparsers.add_parser('evaluate', help='Evaluate the specified parser and dataset.')

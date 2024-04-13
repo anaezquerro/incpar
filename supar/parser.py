@@ -94,8 +94,6 @@ class Parser(object):
         amp: bool = False,
         cache: bool = False,
         verbose: bool = True,
-        save_eval: str = None,
-        save_predict: str = None,
         **kwargs
     ) -> None:
         r"""
@@ -271,16 +269,10 @@ class Parser(object):
         if args.wandb and is_master():
             wandb.finish()
 
-        if save_eval:
-            results = self.evaluate(data=args.test, save_eval=save_eval, batch_size=10)
+        self.evaluate(data=args.test, batch_size=batch_size)
+        self.predict(args.test, batch_size=batch_size, buckets=buckets, workers=workers)
 
-        folder = '/'.join(args.path.split('/')[:-1])
-        folder = folder + '/' if len(folder) > 0 else folder
-
-        if save_predict:
-            self.predict(args.test, save_predict, batch_size=10, buckets=buckets, workers=workers)
-
-        with open(folder + 'status', 'w') as file:
+        with open(f'{self.args.folder}/status', 'w') as file:
             file.write('finished')
 
 
@@ -294,7 +286,6 @@ class Parser(object):
         amp: bool = False,
         cache: bool = False,
         verbose: bool = True,
-        save_eval: str = None,
         **kwargs
     ):
         r"""
@@ -351,9 +342,8 @@ class Parser(object):
                     f"{sum(data.sizes)/elapsed.total_seconds():.2f} Tokens/s, "
                     f"{len(data)/elapsed.total_seconds():.2f} Sents/s")
 
-        if save_eval:
-            with open(save_eval, 'wb') as file:
-                pickle.dump(obj=metric, file=file)
+        with open(f'{self.args.folder}/metrics.pickle', 'wb') as file:
+            pickle.dump(obj=metric, file=file)
 
         return metric
 

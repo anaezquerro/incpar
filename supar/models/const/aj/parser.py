@@ -152,15 +152,13 @@ class AttachJuxtaposeConstituencyParser(Parser):
         if args.encoder == 'bert':
             t = TransformerTokenizer(args.bert)
             pad_token = t.pad if t.pad else PAD
-            WORD = SubwordField('words', pad=t.pad, unk=t.unk, bos=t.bos, eos=t.eos, fix_len=args.fix_len, tokenize=t,
-                                fnseq=lambda x: tuple(list(x) + [pad_token]*args.delay))
+            WORD = SubwordField('words', pad=t.pad, unk=t.unk, bos=t.bos, eos=t.eos, fix_len=args.fix_len, tokenize=t, delay=args.delay)
             WORD.vocab = t.vocab
         else:
-            WORD = Field('words', pad=PAD, unk=UNK, bos=BOS, eos=EOS, lower=True, fn=lambda x: tuple(list(x) + [PAD]*args.delay))
+            WORD = Field('words', pad=PAD, unk=UNK, bos=BOS, eos=EOS, lower=True, delay=args.delay)
             if 'char' in args.feat:
-                CHAR = SubwordField('chars', pad=PAD, unk=UNK, bos=BOS, eos=EOS, fix_len=args.fix_len,
-                                    fnseq=lambda x: tuple(list(x) + [PAD]*args.delay))
-        TAG = Field('tags', pad=PAD, unk=UNK, bos=BOS, eos=EOS, lower=True, fn=lambda x: tuple(list(x) + [PAD]*args.delay))
+                CHAR = SubwordField('chars', pad=PAD, unk=UNK, bos=BOS, eos=EOS, fix_len=args.fix_len, delay=args.delay)
+        TAG = Field('tags', pad=PAD, unk=UNK, bos=BOS, eos=EOS, lower=True, delay=args.delay)
         TREE = RawField('trees')
         NODE, PARENT, NEW = Field('node', use_vocab=False), Field('parent', unk=UNK), Field('new', unk=UNK)
         transform = AttachJuxtaposeTree(WORD=(WORD, CHAR), POS=TAG, TREE=TREE, NODE=NODE, PARENT=PARENT, NEW=NEW)

@@ -187,7 +187,7 @@ class SLDependencyParser(Parser):
                 torch.concat([x, torch.zeros(mask.shape[1] - len(x))])
                 for x in list_of_tensors])
 
-        head_preds = resize(head_preds).to(torch.int32).cuda()
+        head_preds = resize(head_preds).to(torch.int32).to(self.model.device)
 
         return AttachmentMetric(loss, (head_preds, rel_preds), (heads, rels), mask)
 
