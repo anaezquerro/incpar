@@ -22,14 +22,14 @@ In order to reproduce our experiments, follow the installation and deployment st
 
 **Dependency Parsing**:
 
-* **Sequence labeling Dependency Parser** ([`SLDependencyParser`](supar/models/dep/sl/parser.py)): Inherits all arguments of the main class [`Parser`](supar/parser.py) and allows the flag `--sl_codes` to specify encoding to configure the trees linearization (`abs`, `rel`, `pos`, `1p`, `2p`).
+* **Sequence labeling Dependency Parser** ([`SLDependencyParser`](supar/models/dep/sl/parser.py)): Inherits all arguments of the main class [`Parser`](supar/parser.py) and allows the flag `--codes` to specify encoding to configure the trees linearization (`abs`, `rel`, `pos`, `1p`, `2p`).
 
 ***Experiment***: Train absolute encoding parser with [mGPT](https://huggingface.co/ai-forever/mGPT) as encoder and LSTM layer as decoder to predict labels.  
 
 ```shell
 python3 -u -m supar.cmds.dep.sl train -b -c configs/config-mgpt.ini \
     -p ../results/models-dep/english-ewt/abs-mgpt-lstm/parser.pt \
-    --sl_codes abs --decoder lstm \
+    --codes abs --decoder lstm \
     --train ../treebanks/english-ewt/train.conllu \
     --dev ../treebanks/english-ewt/dev.conllu \
     --test ../treebanks/english-ewt/test.conllu
@@ -58,12 +58,12 @@ This will save in folder `results/models-dep/english-ewt/eager-bloom560-mlp` the
 
 **Constituency Parsing** 
 
-* **Sequence Labeling Constituency Parser** ([`SLConstituencyParser`](supar/models/const/sl/parser.py)): Analogously to [`SLDependencyParser`](supar/models/dep/sl/parser.py), it allows the flag `--sl_codes` in order to specify the indexing to use (`abs`, `rel`).
+* **Sequence Labeling Constituency Parser** ([`SLConstituencyParser`](supar/models/const/sl/parser.py)): Analogously to [`SLDependencyParser`](supar/models/dep/sl/parser.py), it allows the flag `--codes` in order to specify the indexing to use (`abs`, `rel`).
 
 ```shell 
-python3 -u -m supar.cmds.const.sl train -b -c configs/config-mgpt.ini \
+python3 -u -m supar.cmds.const.sl train -b -d cpu -c configs/config-mgpt.ini \
     -p ../results/models-con/ptb/abs-mgpt-lstm/parser.pt \
-    --sl_codes abs --decoder lstm \
+    --codes abs --decoder lstm \
     --train ../treebanks/ptb-gold/train.trees \
     --dev ../treebanks/ptb-gold/dev.trees \
     --test ../treebanks/ptb-gold/test.trees
@@ -74,7 +74,7 @@ python3 -u -m supar.cmds.const.sl train -b -c configs/config-mgpt.ini \
 ```shell 
 python3 -u -m supar.cmds.const.aj train -b -c configs/config-bloom560.ini \
     -p ../results/models-con/ptb/aj-bloom560-mlp/parser.pt \
-    --delay=2 \
+    --delay=2 --use_vq \
     --train ../treebanks/ptb-gold/train.trees \
     --dev ../treebanks/ptb-gold/dev.trees \
     --test ../treebanks/ptb-gold/test.trees

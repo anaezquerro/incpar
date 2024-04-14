@@ -24,7 +24,7 @@ def main():
     subparser.add_argument('--embed', default=None, help='file or embeddings available at `supar.utils.Embedding`')
     subparser.add_argument('--use_vq', action='store_true', default=False, help='whether to use vector quantization')
     subparser.add_argument('--decoder', choices=['mlp', 'lstm'], default='mlp', help='incremental decoder to use')
-    subparser.add_argument('--sl_coding', choices=['abs', 'rel'], default=None, help='sequential encoding used')
+    subparser.add_argument('--codes', choices=['abs', 'rel'], default=None, help='sequential encoding used')
     subparser.add_argument('--delay', type=int, default=0)
     subparser.add_argument('--root_node', type=str, default='S')
     # evaluate

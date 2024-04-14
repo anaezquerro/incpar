@@ -56,7 +56,7 @@ class SLDependencyModel(Model):
                 n_in=self.args.n_encoder_hidden, n_out=out_dim, dropout=mlp_dropout
             )
 
-        if self.args.sl_codes == '2p':
+        if self.args.codes == '2p':
             self.label_decoder1 = decoder(self.args.n_labels[0])
             self.label_decoder2 = decoder(self.args.n_labels[1])
             self.label_decoder = lambda x: (self.label_decoder1(x), self.label_decoder2(x))
@@ -138,7 +138,7 @@ class SLDependencyModel(Model):
         mask: torch.Tensor
          ) -> torch.Tensor:
 
-        loss = self.criterion(s_label[mask], labels[mask]) if self.args.sl_codes != '2p' else sum(self.criterion(scores[mask], golds[mask]) for scores, golds in zip(s_label, labels))
+        loss = self.criterion(s_label[mask], labels[mask]) if self.args.codes != '2p' else sum(self.criterion(scores[mask], golds[mask]) for scores, golds in zip(s_label, labels))
 
         loss += self.criterion(s_rel[mask], rels[mask])
 
@@ -148,7 +148,7 @@ class SLDependencyModel(Model):
 
     def decode(self, s_label: Union[Tuple[torch.Tensor], torch.Tensor], s_rel: torch.Tensor, s_tag: torch.Tensor,
                mask: torch.Tensor):
-        label_preds = s_label.argmax(-1) if self.args.sl_codes != '2p' else tuple(map(lambda x: x.argmax(-1), s_label))
+        label_preds = s_label.argmax(-1) if self.args.codes != '2p' else tuple(map(lambda x: x.argmax(-1), s_label))
         rel_preds = s_rel.argmax(-1)
         tag_preds = s_tag.argmax(-1) if self.args.encoder == 'lstm' else None
         return label_preds, rel_preds, tag_preds

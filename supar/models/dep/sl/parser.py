@@ -44,7 +44,7 @@ class SLDependencyParser(Parser):
 
         self.TAG = self.transform.UPOS
         self.LABEL, self.DEPREL = self.transform.LABEL, self.transform.DEPREL
-        self.encoder = get_dep_encoder(self.args.sl_codes, LABEL_SEPARATOR)
+        self.encoder = get_dep_encoder(self.args.codes, LABEL_SEPARATOR)
 
     def train(
         self,
@@ -152,7 +152,7 @@ class SLDependencyParser(Parser):
         label_preds, rel_preds, tag_preds = self.model.decode(s_label, s_rel, s_tag, mask)
 
         # obtain original label and deprel strings to compute decoding
-        if self.args.sl_codes == '2p':
+        if self.args.codes == '2p':
             label_preds = [
                 (self.LABEL[0].vocab[l1.tolist()], self.LABEL[1].vocab[l2.tolist()])
                 for l1, l2 in zip(*map(lambda x: x[mask].split(lens), label_preds))
@@ -208,7 +208,7 @@ class SLDependencyParser(Parser):
         label_preds, rel_preds, tag_preds = self.model.decode(s_label, s_rel, s_tag, mask)
 
         # obtain original label and deprel strings to compute decoding
-        if self.args.sl_codes == '2p':
+        if self.args.codes == '2p':
             label_preds = [
                 (self.LABEL[0].vocab[l1.tolist()], self.LABEL[1].vocab[l2.tolist()])
                 for l1, l2 in zip(*map(lambda x: x[mask].split(lens), label_preds))
@@ -269,7 +269,7 @@ class SLDependencyParser(Parser):
         TAG = Field('tags')
 
 
-        if args.sl_codes == '2p':
+        if args.codes == '2p':
             LABEL1 = Field('labels1', fn=lambda seq: split_planes(seq, 0))
             LABEL2 = Field('labels2', fn=lambda seq: split_planes(seq, 1))
             LABEL = (LABEL1, LABEL2)
@@ -280,7 +280,7 @@ class SLDependencyParser(Parser):
         HEAD = Field('heads', use_vocab=False)
 
         transform = SLDependency(
-            encoder=get_dep_encoder(args.sl_codes, LABEL_SEPARATOR),
+            encoder=get_dep_encoder(args.codes, LABEL_SEPARATOR),
             FORM=(WORD, TEXT, CHAR), UPOS=TAG, HEAD=HEAD, DEPREL=DEPREL, LABEL=LABEL)
 
         train = Dataset(transform, args.train, **args)
@@ -291,7 +291,7 @@ class SLDependencyParser(Parser):
         TAG.build(train)
         DEPREL.build(train)
 
-        if args.sl_codes == '2p':
+        if args.codes == '2p':
             LABEL[0].build(train)
             LABEL[1].build(train)
         else:
@@ -299,7 +299,7 @@ class SLDependencyParser(Parser):
 
         args.update({
             'n_words': len(WORD.vocab) if args.encoder == 'bert' else WORD.vocab.n_init,
-            'n_labels': len(LABEL.vocab) if args.sl_codes != '2p' else (len(LABEL[0].vocab), len(LABEL[1].vocab)),
+            'n_labels': len(LABEL.vocab) if args.codes != '2p' else (len(LABEL[0].vocab), len(LABEL[1].vocab)),
             'n_rels': len(DEPREL.vocab),
             'n_tags': len(TAG.vocab),
             'n_chars': len(CHAR.vocab) if CHAR is not None else None,

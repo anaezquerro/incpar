@@ -174,19 +174,18 @@ class SLConstituentParser(Parser):
         if args.encoder == 'bert':
             t = TransformerTokenizer(args.bert)
             pad_token = t.pad if t.pad else PAD
-            WORD = SubwordField('words', pad=t.pad, unk=t.unk, bos=t.bos, fix_len=args.fix_len, tokenize=t,
-                                fnseq=lambda x: tuple(list(x) + [pad_token]*args.delay))
+            WORD = SubwordField('words', pad=t.pad, unk=t.unk, bos=t.bos, fix_len=args.fix_len, tokenize=t, delay=args.delay)
             WORD.vocab = t.vocab
         else:
-            WORD = Field('words', pad=PAD, unk=UNK, bos=BOS, lower=True, fn=lambda x: tuple(list(x) + [PAD]*args.delay))
+            WORD = Field('words', pad=PAD, unk=UNK, bos=BOS, lower=True, delay=args.delay)
             if 'char' in args.feat:
-                CHAR = SubwordField('chars', pad=PAD, unk=UNK, bos=BOS, fix_len=args.fix_len, fnseq=lambda x: tuple(list(x) + [PAD]*args.delay))
-        TAG = Field('tags', bos=BOS, fn=lambda x: tuple(list(x) + [PAD]*args.delay))
+                CHAR = SubwordField('chars', pad=PAD, unk=UNK, bos=BOS, fix_len=args.fix_len, delay=args.delay)
+        TAG = Field('tags', bos=BOS,)
         TEXT = RawField('texts')
         COMMON = Field('commons')
         ANCESTOR = Field('ancestors')
         TREE = RawField('trees')
-        encoder = get_con_encoder(args.encoding)
+        encoder = get_con_encoder(args.codes)
         transform = SLConstituent(encoder=encoder, WORD=(WORD, TEXT, CHAR), POS=TAG,
                                   COMMON=COMMON, ANCESTOR=ANCESTOR, TREE=TREE)
 
