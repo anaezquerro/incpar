@@ -2,7 +2,7 @@
 
 A Python package for reproducing results of fully incremental dependency and constituency parsers described in:
 
-- [On The Challenges of Fully Incremental Neural Dependency Parsing]((https://aclanthology.org/2023.ijcnlp-short.7/)) at [IJCNLP-AACL 2023](http://www.ijcnlp-aacl2023.org/).
+- [On The Challenges of Fully Incremental Neural Dependency Parsing](https://aclanthology.org/2023.ijcnlp-short.7/) at [IJCNLP-AACL 2023](http://www.ijcnlp-aacl2023.org/).
 - [From Partial to Strictly Incremental Constituent Parsing](https://aclanthology.org/2024.eacl-short.21/) at [EACL 2024](https://2024.eacl.org/).
 - [Fully Incremental Parsing based on Neural Networks](https://ruc.udc.es/dspace/handle/2183/33269).
 
