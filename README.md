@@ -61,7 +61,7 @@ This will save in folder `results/models-dep/english-ewt/eager-bloom560-mlp` the
 * **Sequence Labeling Constituency Parser** ([`SLConstituencyParser`](supar/models/const/sl/parser.py)): Analogously to [`SLDependencyParser`](supar/models/dep/sl/parser.py), it allows the flag `--codes` in order to specify the indexing to use (`abs`, `rel`).
 
 ```shell 
-python3 -u -m supar.cmds.const.sl train -b -d cpu -c configs/config-mgpt.ini \
+python3 -u -m supar.cmds.const.sl train -b -c configs/config-mgpt.ini \
     -p ../results/models-con/ptb/abs-mgpt-lstm/parser.pt \
     --codes abs --decoder lstm \
     --train ../treebanks/ptb-gold/train.trees \
