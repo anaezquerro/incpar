@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from supar.model import Model
 from supar.models.const.aj.transform import AttachJuxtaposeTree
-from supar.modules import GraphConvolutionalNetwork, MLP, DecoderLSTM
+from supar.modules import GraphConvolutionalNetwork, MLP
 from supar.utils import Config
 from supar.utils.common import INF
 from supar.utils.fn import pad

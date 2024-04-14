@@ -50,9 +50,8 @@ class SLConstituentModel(Model):
         self.common_decoder, self.ancestor_decoder = None, None
         if self.args.decoder == 'lstm':
             decoder = lambda out_dim: DecoderLSTM(
-                input_size=self.args.n_encoder_hidden, hidden_size=self.args.n_encoder_hidden,
-                num_layers=self.args.n_decoder_layers, dropout=mlp_dropout,
-                output_size=out_dim,
+                self.args.n_encoder_hidden, self.args.n_encoder_hidden, out_dim, 
+                self.args.n_decoder_layers, dropout=mlp_dropout, device=self.device
             )
         else:
             decoder = lambda out_dim: MLP(

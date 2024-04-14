@@ -3,7 +3,7 @@ from supar.modules.mlp import MLP
 import torch
 
 class DecoderLSTM(nn.Module):
-    def __init__(self, input_size: int, hidden_size: int, output_size: int, num_layers: int, dropout: float):
+    def __init__(self, input_size: int, hidden_size: int, output_size: int, num_layers: int, dropout: float, device: str):
         super().__init__()
 
         self.input_size, self.hidden_size = input_size, hidden_size
@@ -16,6 +16,7 @@ class DecoderLSTM(nn.Module):
 
         self.mlp = MLP(n_in=hidden_size, n_out=output_size, dropout=dropout,
                        activation=True)
+        self.device = device
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         r"""
@@ -25,8 +26,8 @@ class DecoderLSTM(nn.Module):
         batch_size, seq_len, _ = x.shape
 
         # LSTM forward pass
-        h0, c0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).cuda(), \
-                 torch.zeros(self.num_layers, batch_size, self.hidden_size).cuda()
+        h0, c0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(self.device), \
+                 torch.zeros(self.num_layers, batch_size, self.hidden_size).to(self.device)
         hn, cn = self.lstm(x, (h0, c0))
 
         # MLP forward pass

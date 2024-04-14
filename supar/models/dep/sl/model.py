@@ -74,7 +74,7 @@ class SLDependencyModel(Model):
         if self.args.encoder == 'lstm':
             self.pos_tagger = DecoderLSTM(
                 input_size=self.args.n_encoder_hidden, hidden_size=self.args.n_encoder_hidden,
-                output_size=self.args.n_tags, num_layers=1, dropout=mlp_dropout)
+                output_size=self.args.n_tags, num_layers=1, dropout=mlp_dropout, device=self.device)
         else:
             self.pos_tagger = nn.Identity()
 

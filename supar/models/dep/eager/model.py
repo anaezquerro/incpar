@@ -61,9 +61,8 @@ class ArcEagerDependencyModel(Model):
 
         if self.args.decoder == 'lstm':
             decoder = lambda out_dim: DecoderLSTM(
-                input_size=self.args.n_encoder_hidden, hidden_size=self.args.n_encoder_hidden,
-                num_layers=self.args.n_decoder_layers, dropout=mlp_dropout,
-                output_size=out_dim
+                self.args.n_encoder_hidden, self.args.n_encoder_hidden, out_dim,
+                self.args.n_decoder_layers, dropout=mlp_dropout, device=self.device
             )
         else:
             decoder = lambda out_dim: MLP(
@@ -81,7 +80,8 @@ class ArcEagerDependencyModel(Model):
         # create PoS tagger
         if self.args.encoder == 'lstm':
             self.pos_tagger = DecoderLSTM(
-                input_size=self.args.n_encoder_hidden, hidden_size=self.args.n_encoder_hidden, output_size=self.args.n_tags, num_layers=1, dropout=mlp_dropout
+                self.args.n_encoder_hidden, self.args.n_encoder_hidden, self.args.n_tags, 
+                num_layers=1, dropout=mlp_dropout, device=self.device
             )
         else:
             self.pos_tagger = nn.Identity()
