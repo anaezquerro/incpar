@@ -183,7 +183,7 @@ class ArcEagerDependencyModel(Model):
         trel_mask = torch.tensor(list(map(lambda x: x not in ['reduce', 'shift'], transition_pred)))
         s_trel, trels = s_trel[trel_mask], trels[trel_mask]
 
-        tag_loss = self.criterion(s_tag[smask], tags[smask]) if self.args.encoder == 'lstm' else torch.tensor(0).to(f'cuda:{self.device}')
+        tag_loss = self.criterion(s_tag[smask], tags[smask]) if self.args.encoder == 'lstm' else torch.tensor(0).to(self.device)
         transition_loss = self.criterion(s_transition, transitions)
         trel_loss = self.criterion(s_trel, trels)
 
